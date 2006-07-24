@@ -1,5 +1,5 @@
 #include "Configurations.h"
-#include <iostream>
+#include <fstream>
 
 Configurations::Configurations() {
 	initialize_configs();
@@ -10,12 +10,11 @@ Configurations::Configurations() {
 Configurations::~Configurations() {}
 
 void Configurations::check_files_and_dir() {
-	std::string path = home_path + "/.media_player";
-	DIR * dir = Opendir(path.c_str());
+	DIR * dir = Opendir(conf_dir.c_str());
 	if (dir == NULL) {
 		int pid = Fork();
 		if (pid == 0) {
-			Execlp("mkdir", "mkdir", path.c_str());
+			Execlp("mkdir", "mkdir", conf_dir.c_str());
 		}
 		else {
 			Wait(NULL);
@@ -24,17 +23,13 @@ void Configurations::check_files_and_dir() {
 	else {
 		Closedir(dir);
 	}
-	path += "/mp.conf";
-	std::ifstream tmp(path.c_str());
-	tmp.close();
 }
 
 void Configurations::read_config_file() {
-	std::string path = home_path + "/.media_player/mp.conf";
-	config_file.open(path.c_str(), std::ios_base::in);
-	std::string line;
-	while (config_file.good()) {
-		getline(config_file, line);
+	std::ifstream conf_file_stream(conf_file.c_str());
+	while (conf_file_stream.good()) {
+		std::string line;
+		getline(conf_file_stream, line);
 		if (line.length() != 0 && line[0] != '#') {
 			unsigned int loc = line.find('=');
 			if (loc != std::string::npos) {
@@ -70,8 +65,8 @@ void Configurations::read_config_file() {
 				else if (var == "HEIGHT") {
 					height = atoi(val.c_str());
 				}
-				else if (var == "LIBRARY_PATH") {
-					library_path = val;
+				else if (var == "LIBRARY_ROOT") {
+					library_root = val;
 				}
 				else if (var == "PLAYLIST") {
 					continue;
@@ -82,34 +77,34 @@ void Configurations::read_config_file() {
 			}
 		}
 	}
-	config_file.close();
+	conf_file_stream.close();
 }
 
 void Configurations::write_config_file() {
-	std::string path = home_path + "/.media_player/mp.conf";
-	config_file.open(path.c_str(), std::ios_base::out | std::ios_base::trunc);
-	config_file << "# This file was generated automatically by media_player.\n"
-	            << "# DO NOT modify the contents of this file!" << std::endl;
-	config_file << "LIBRARY_PATH=" << library_path << std::endl;
-	config_file << "HPANED_POS=" << hpaned_pos << std::endl;
-	config_file << "VPANED_POS=" << vpaned_pos << std::endl;
-	config_file << "WIDTH=" << width << std::endl;
-	config_file << "HEIGHT=" << height << std::endl;
-	config_file << "SONGLIST_COLS=";
+	std::ofstream conf_file_stream(conf_file.c_str());
+	conf_file_stream << "# This file was generated automatically "
+	                 << "by media_player.\n# DO NOT modify the "
+	                 << "contents of this file!" << std::endl;
+	conf_file_stream << "LIBRARY_ROOT=" << library_root << std::endl;
+	conf_file_stream << "HPANED_POS=" << hpaned_pos << std::endl;
+	conf_file_stream << "VPANED_POS=" << vpaned_pos << std::endl;
+	conf_file_stream << "WIDTH=" << width << std::endl;
+	conf_file_stream << "HEIGHT=" << height << std::endl;
+	conf_file_stream << "SONGLIST_COLS=";
 	for (int i = 0; i < 7; ++i) {
-		config_file << songlist_columns[i] << ",";
+		conf_file_stream << songlist_columns[i] << ",";
 	}
-	config_file << std::endl;
-	config_file << "PLAYLIST_COLS=";
+	conf_file_stream << std::endl;
+	conf_file_stream << "PLAYLIST_COLS=";
 	for (int i = 0; i < 7; ++i) {
-		config_file << playlist_columns[i] << ",";
+		conf_file_stream << playlist_columns[i] << ",";
 	}
-	config_file << std::endl;
-	config_file << "PLAYLIST=everything below this line" << std::endl;
+	conf_file_stream << std::endl;
+	conf_file_stream << "PLAYLIST=everything below this line" << std::endl;
 	for (unsigned int i = 0; i < playlist.size(); ++i) {
-		config_file << "=" << playlist[i] << std::endl;
+		conf_file_stream << "=" << playlist[i] << std::endl;
 	}
-	config_file.close();
+	conf_file_stream.close();
 }
 
 int Configurations::get_songlist_column(int index) {
@@ -136,12 +131,16 @@ int Configurations::get_height() {
 	return height;
 }
 
-std::string * Configurations::get_library_path() {
-	return &library_path;
+std::string * Configurations::get_library_root() {
+	return &library_root;
 }
 
 std::string * Configurations::get_home_path() {
 	return &home_path;
+}
+
+std::string * Configurations::get_library_file() {
+	return &library_file;
 }
 
 std::vector<std::string> * Configurations::get_playlist() {
@@ -172,8 +171,8 @@ void Configurations::set_height(int _height) {
 	height = _height;
 }
 
-void Configurations::set_library_path(std::string _library_path) {
-	library_path = _library_path;
+void Configurations::set_library_root(std::string _library_root) {
+	library_root = _library_root;
 }
 
 void Configurations::initialize_configs() {
@@ -185,6 +184,9 @@ void Configurations::initialize_configs() {
 		songlist_columns[i] = ((width - hpaned_pos) / 7) - 1;
 		playlist_columns[i] = ((width - hpaned_pos) / 4) - 2;
 	}
-	library_path = "UNSPECIFIED";
+	library_root = "UNSPECIFIED";
 	home_path = Getenv("HOME");
+	conf_dir = home_path + "/.media_player";
+	conf_file = conf_dir + "/mp.conf";
+	library_file = conf_dir + "/library.dat";
 }

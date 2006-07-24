@@ -13,15 +13,15 @@
 
 class LibraryFileBuilder	{
 public:
-	LibraryFileBuilder(std::string &);
+	LibraryFileBuilder();
 	virtual ~LibraryFileBuilder();
-	void generate_library_file(std::string &);
-	
+	void generate_library_file(std::string &, std::string &);
+
 private:
-	std::ofstream library_file;
+	std::ofstream library_file_stream;
 	void recurse_directory(std::string &);
 	void process_file(std::string &);
-	
+
 	// wrapper functions
 	static inline DIR * Opendir(const char * name) {
 		DIR * dir;
@@ -31,7 +31,7 @@ private:
 		}
 		return dir;
 	}
-	
+
 	static inline int Closedir(DIR * dir) {
 		int rc;
 		if ((rc = closedir(dir)) == -1) {
@@ -40,7 +40,7 @@ private:
 		}
 		return rc;
 	}
-	
+
 	static inline struct dirent * Readdir(DIR * dir) {
 		struct dirent * ret;
 		if ((ret = readdir(dir)) == NULL) {
@@ -51,7 +51,7 @@ private:
 		}
 		return ret;
 	}
-	
+
 	static inline int Stat(const char * path, struct stat * buf) {
 		int rc;
 		if ((rc = stat(path, buf)) == -1) {

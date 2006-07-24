@@ -12,8 +12,8 @@ Library::~Library() {}
 
 void Library::build_library(std::string & path) {
 	std::ifstream library_file(path.c_str());
-	std::string current_line;
 	while (library_file.good()) {
+		std::string current_line;
 		getline(library_file, current_line);
 		if (current_line.length() == 0) {
 			continue;

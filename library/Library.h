@@ -18,7 +18,7 @@ public:
 	std::vector<Artist> * get_library_root();
 	void clear_library();
 	Song * find_song_node(std::string &, std::string &, std::string &);
-	
+
 private:
 	std::vector<Artist> library_root;
 	Artist * handle_artist(std::string &);

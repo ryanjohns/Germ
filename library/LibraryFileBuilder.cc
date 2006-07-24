@@ -3,20 +3,15 @@
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 
-LibraryFileBuilder::LibraryFileBuilder(std::string & path)
-: library_file(path.c_str()) {}
+LibraryFileBuilder::LibraryFileBuilder() {}
 
-LibraryFileBuilder::~LibraryFileBuilder() {
-	library_file.close();
-}
+LibraryFileBuilder::~LibraryFileBuilder() {}
 
-void LibraryFileBuilder::generate_library_file(std::string & path) {
-	if (library_file.is_open()) {
-		recurse_directory(path);
-	}
-	else {
-		std::cout << "Could not open library_file stream!" << std::endl;
-	}
+void LibraryFileBuilder::generate_library_file(std::string & library_file,
+			std::string & root) {
+	library_file_stream.open(library_file.c_str());
+	recurse_directory(root);
+	library_file_stream.close();
 }
 
 void LibraryFileBuilder::recurse_directory(std::string & path) {
@@ -53,14 +48,14 @@ void LibraryFileBuilder::process_file(std::string & path) {
 		TagLib::uint track_number = file.tag()->track();
 		TagLib::uint length = file.audioProperties()->length();
 		TagLib::uint bitrate = file.audioProperties()->bitrate();
-		library_file << artist_name << SEPARATOR
-		             << album_title << SEPARATOR
-		             << song_title << SEPARATOR
-		             << genre << SEPARATOR
-		             << year << SEPARATOR
-		             << track_number << SEPARATOR
-		             << length << SEPARATOR
-		             << bitrate << SEPARATOR
-		             << path << std::endl;
+		library_file_stream << artist_name << SEPARATOR
+		                    << album_title << SEPARATOR
+		                    << song_title << SEPARATOR
+		                    << genre << SEPARATOR
+		                    << year << SEPARATOR
+		                    << track_number << SEPARATOR
+		                    << length << SEPARATOR
+		                    << bitrate << SEPARATOR
+		                    << path << std::endl;
 	}
 }

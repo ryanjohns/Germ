@@ -1,5 +1,18 @@
-# Executable filename
+# Filenames
 EXECUTABLE = media_player
+ICON = icons/$(EXECUTABLE).png
+PIXMAPS = icons/next.xpm \
+          icons/play_pause.xpm \
+          icons/previous.xpm \
+          icons/stop.xpm
+
+# Install variables
+INSTALL = /usr/bin/install
+OWNER = root
+GROUP = root
+BIN_DIR = /usr/local/bin
+ICON_DIR = /usr/local/share/pixmaps
+PIXMAPS_DIR = $(ICON_DIR)/$(EXECUTABLE)
 
 # C++ compiler
 CXX = g++
@@ -10,7 +23,7 @@ CXXFLAGS = -Wall -W -g -c \
            `taglib-config --cflags`
 
 # Linker flags
-LDFLAGS = `taglib-config --libs` `pkg-config --libs gtkmm-2.4 gstreamer-0.10`
+LDFLAGS = `pkg-config --libs gtkmm-2.4 gstreamer-0.10` `taglib-config --libs`
 
 # Source files
 SOURCES = media_player.cc \
@@ -60,3 +73,11 @@ $(EXECUTABLE): $(OBJS)
 
 clean:
 	-rm -f *.o */*.o $(EXECUTABLE)
+
+install: $(EXECUTABLE) $(ICONS)
+	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 755 -d $(BIN_DIR) $(PIXMAPS_DIR)
+	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 755 $(EXECUTABLE) $(BIN_DIR)
+	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 644 $(PIXMAPS) $(PIXMAPS_DIR)
+
+new: $(EXECUTABLE)
+	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 755 $(EXECUTABLE) $(BIN_DIR)
