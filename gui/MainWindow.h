@@ -32,6 +32,7 @@ protected:
 	virtual void on_button_clear();
 	virtual void on_button_scan();
 	virtual bool on_shutdown();
+	virtual void on_update_window_title(Glib::ustring);
 	
 	Gtk::VBox m_VBox;
 	Gtk::HPaned m_HPaned;

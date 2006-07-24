@@ -1,6 +1,3 @@
-#include <gst/gst.h>
-#include <string>
-#include <iostream>
 #include "Player.h"
 
 Player::Player(){
@@ -8,11 +5,11 @@ Player::Player(){
 	m_isSongLoaded = false;
 	m_nextSong.clear();
 	m_backupSong.clear();
-	
+
 	gst_init(NULL, NULL);
-	
+
 	pipeline = gst_element_factory_make("playbin", "play");
-	
+
 	gst_bus_add_watch(gst_pipeline_get_bus(GST_PIPELINE(pipeline)),
 		     Player::bus_watch, (gpointer)this);
 }
@@ -26,6 +23,10 @@ void Player::signal_song_request(bool previous) {
 	m_signal_song_request.emit(previous);
 }
 
+void Player::signal_update_window_title(Glib::ustring title) {
+	m_signal_update_window_title.emit(title);
+}
+
 void Player::setNextSong(Song * song) {
 	if (song == NULL) {
 		m_nextSong.clear();
@@ -33,6 +34,9 @@ void Player::setNextSong(Song * song) {
 	else {
 		m_nextSong = *song->get_path();
 		m_backupSong = m_nextSong;
+		Glib::ustring tmp(*song->get_artist_name());
+		tmp += " - " + *song->get_song_title();
+		signal_update_window_title(tmp);
 	}
 }
 
@@ -42,7 +46,6 @@ void Player::play() {
 	}
 	if (!m_isSongLoaded && !m_nextSong.empty()) {
 		std::string uri = "file://" + m_nextSong;
-		std::cout << "Adding: " << uri << std::endl;
 		g_object_set(G_OBJECT(pipeline), "uri", uri.c_str() , NULL);
 		m_isSongLoaded = true;
 	}
@@ -55,13 +58,6 @@ void Player::play() {
 
 void Player::play(Song * song) {
 	setNextSong(song);
-	m_isSongLoaded = false;
-	play();
-}
-
-void Player::play(char * s) {
-	m_nextSong = std::string(s);
-	m_backupSong = m_nextSong;
 	m_isSongLoaded = false;
 	play();
 }
@@ -108,12 +104,10 @@ void Player::seek(double p) {
 }
 
 gboolean Player::bus_watch(GstBus *, GstMessage * msg, gpointer data) {
-	
 	Player * player = (Player *)data;
 
 	switch (GST_MESSAGE_TYPE(msg)) {
 		case GST_MESSAGE_EOS: {
-			g_print("End-of-stream\n");
 			player->next();
 			break;
 		}

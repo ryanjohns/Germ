@@ -61,11 +61,14 @@ void PlaylistView::on_song_request(bool previous) {
 	Gtk::TreeNodeChildren children = m_refTreeModel->children();
 	if (current_song.operator bool() && !children.empty()) {
 		if (previous && current_song != children.begin()) {
+			undecorateCurrentRow();
 			--current_song;
+			decorateCurrentRow();
 			Gtk::TreeModel::Row row = *current_song;
 			player->setNextSong(row[m_Columns.m_song_node]);
 		}
 		else if (!previous && current_song != --children.end()) {
+			undecorateCurrentRow();
 			++current_song;
 			decorateCurrentRow();
 			Gtk::TreeModel::Row row = *current_song;
@@ -229,14 +232,14 @@ std::string PlaylistView::formatLength(int length) {
 }
 
 void PlaylistView::decorateCurrentRow() {
-	Gtk::CellRendererText * text;
+	/*Gtk::CellRendererText * text;
 	int x = m_TreeView.get_columns().size();
 	for (int i = 0; i < x; ++i) {
 		if ((text = dynamic_cast<Gtk::CellRendererText*>
 				(m_TreeView.get_column_cell_renderer(i)))) {
 			text->property_weight() = 1000;
 		}
-	}
+	}*/
 }
 
 void PlaylistView::undecorateCurrentRow() {

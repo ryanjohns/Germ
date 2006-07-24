@@ -74,9 +74,10 @@ $(EXECUTABLE): $(OBJS)
 clean:
 	-rm -f *.o */*.o $(EXECUTABLE)
 
-install: $(EXECUTABLE) $(ICONS)
+install: $(EXECUTABLE) $(ICON) $(PIXMAPS)
 	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 755 -d $(BIN_DIR) $(PIXMAPS_DIR)
 	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 755 $(EXECUTABLE) $(BIN_DIR)
+	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 644 $(ICON) $(ICON_DIR)
 	$(INSTALL) -c -o $(OWNER) -g $(GROUP) -m 644 $(PIXMAPS) $(PIXMAPS_DIR)
 
 new: $(EXECUTABLE)

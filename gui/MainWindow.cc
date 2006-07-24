@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include "../library/LibraryFileBuilder.h"
-#include <iostream>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
 
@@ -17,12 +16,16 @@ MainWindow::MainWindow()
 	// build the library
 	library.build_library(*config.get_library_file());
 
-	// setup the main window and connect shutdown hooks
+	// setup the main window and connect window signals
 	set_title("Media Player");
+	set_icon_from_file("/usr/local/share/pixmaps/media_player.png");
 	set_default_size(config.get_width(), config.get_height());
 	set_border_width(1);
 	Gtk::Main::signal_quit().connect(
 		sigc::mem_fun(this, &MainWindow::on_shutdown)
+	);
+	player.m_signal_update_window_title.connect(
+		sigc::mem_fun(*this, &MainWindow::on_update_window_title)
 	);
 
 	// setup, add, and fill the main VBox
@@ -87,7 +90,7 @@ MainWindow::MainWindow()
 
 	// initialize the views
 	m_TreeView.showArtists();
-	m_PlaylistView.restorePlaylist();
+//	m_PlaylistView.restorePlaylist();
 
 	// make everything visible
 	show_all_children();
@@ -157,4 +160,8 @@ bool MainWindow::on_shutdown() {
 	m_PlaylistView.savePlaylist();
 	config.write_config_file();
 	return true;
+}
+
+void MainWindow::on_update_window_title(Glib::ustring title) {
+	set_title(title + " - Media Player");
 }
