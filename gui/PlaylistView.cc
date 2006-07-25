@@ -10,15 +10,15 @@ PlaylistView::PlaylistView(Library * _library, Configurations * _config,
   player(_player) {
 	add(m_TreeView);
 	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	
+
 	m_refTreeModel = Gtk::ListStore::create(m_Columns);
 	m_TreeView.set_model(m_refTreeModel);
-	
+
 	m_TreeView.append_column("Artist", m_Columns.m_col_artist_name);
 	m_TreeView.append_column("Album", m_Columns.m_col_album_title);
 	m_TreeView.append_column("Title", m_Columns.m_col_song_title);
 	m_TreeView.append_column("Length", m_Columns.m_col_string_length);
-	
+
 	for (guint i = 0; i < m_TreeView.get_columns().size(); ++i) {
 		Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
 //		pColumn->set_reorderable(true);
@@ -26,16 +26,16 @@ PlaylistView::PlaylistView(Library * _library, Configurations * _config,
 		pColumn->set_fixed_width(config->get_playlist_column(i));
 		pColumn->set_resizable(true);
 	}
-	
+
 	m_TreeView.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
-	
+
 	m_TreeView.set_reorderable();
-	
+
 //	std::list<Gtk::TargetEntry> list_targets;
 //	list_targets.push_back(Gtk::TargetEntry("PlaylistView"));
 //	m_TreeView.enable_model_drag_source(/*list_targets, */Gdk::MODIFIER_MASK, Gdk::ACTION_MOVE);
 //	m_TreeView.enable_model_drag_dest(/*list_targets, */Gdk::ACTION_COPY | Gdk::ACTION_MOVE);
-	
+
 	player->m_signal_song_request.connect(
 		sigc::mem_fun(*this, &PlaylistView::on_song_request)
 	);
@@ -171,18 +171,18 @@ void PlaylistView::restorePlaylist() {
 		int delim_loc1 = 0;
 		int delim_loc2 = tmp.find(SEPARATOR);
 		std::string artist = tmp.substr(delim_loc1, delim_loc2);
-		
+
 		delim_loc1 = delim_loc2+1;
 		delim_loc2 = tmp.find(SEPARATOR, delim_loc1);
 		std::string album = tmp.substr(delim_loc1, delim_loc2-delim_loc1);
-		
+
 		delim_loc1 = delim_loc2+1;
 		std::string title = tmp.substr(delim_loc1);
 		std::cout << artist << ", " << album << ", " << title << std::endl;
-		
+
 		Song * song = library->find_song_node(artist, album, title);
 		if (song != NULL) {
-			setListData(song);
+			addSong(song);
 		}
 	}
 }

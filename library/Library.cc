@@ -134,19 +134,17 @@ Song * Library::find_song_node(std::string & art, std::string & alb,
 	for (it = library_root.begin(); it != library_root.end(); ++it) {
 		Artist artist = *it;
 		if (*artist.get_artist_name() == art) {
-			std::cout << "found artist " << art << std::endl;
 			std::vector<Album> * albums = artist.get_album_children();
 			std::vector<Album>::iterator it2;
 			for (it2 = albums->begin(); it2 != albums->end(); ++it2) {
 				Album album = *it2;
 				if (*album.get_album_title() == alb) {
-					std::cout << "found album " << alb << std::endl;
 					std::vector<Song> * songs = album.get_song_children();
 					std::vector<Song>::iterator it3;
 					for (it3 = songs->begin(); it3 != songs->end(); ++it3) {
 						Song song = *it3;
 						if (*song.get_song_title() == title) {
-							std::cout << "found song " << title << std::endl;
+							std::cout << "found song: " << title << std::endl;
 							return &(*it3);
 						}
 					}
