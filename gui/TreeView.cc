@@ -165,7 +165,7 @@ bool TreeView::on_key_press_event(GdkEventKey * event) {
 			}
 		}
 	}
-	return true;
+	return Gtk::VBox::on_key_press_event(event);
 }
 
 void TreeView::on_row_activated(const Gtk::TreeModel::Path & path,

@@ -1,13 +1,12 @@
 #include "SeekBar.h"
 #include <sstream>
-#include <iostream>
 
 SeekBar::SeekBar(Player * player)
 : m_player(player) {
 	m_length = 0;
 
 	set_range(0.0, 1.0);
-	set_increments(0.0001, 0.0);
+	set_increments(0.0001, 0.1);
 	set_digits(4);
 	set_update_policy(Gtk::UPDATE_DISCONTINUOUS);
 	set_value_pos(Gtk::POS_RIGHT);
@@ -19,12 +18,17 @@ SeekBar::SeekBar(Player * player)
 
 SeekBar::~SeekBar() {}
 
-void SeekBar::on_move_slider(Gtk::ScrollType) {
-	std::cout << "foo" << std::endl;
-/*	m_seekBarConnection.disconnect();
-	m_seekBarConnection = m_player->m_signal_update_seek_bar.connect(
+bool SeekBar::on_button_press_event(GdkEventButton * event) {
+	m_seekBarConnection.disconnect();
+	return Gtk::HScale::on_button_press_event(event);
+}
+
+bool SeekBar::on_button_release_event(GdkEventButton * event) {
+	Gtk::HScale::on_button_release_event(event);
+	m_seekBarConnection = m_player->signal_update_seek_bar.connect(
 		sigc::mem_fun(*this, &SeekBar::on_update_seek_bar)
-	);*/
+	);
+	return true;
 }
 
 Glib::ustring SeekBar::on_format_value(double val) {
@@ -43,6 +47,12 @@ void SeekBar::on_update_seek_bar(gint64 pos, gint64 len) {
 		set_value(0);
 	else
 		set_value(dpos/dlen);
+}
+
+void SeekBar::on_value_changed() {
+	if (!m_seekBarConnection.connected()) {
+		m_player->seek(get_value());
+	}
 }
 
 Glib::ustring SeekBar::format_time(gint64 len) {

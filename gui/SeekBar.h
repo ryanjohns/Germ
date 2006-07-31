@@ -10,9 +10,11 @@ public:
 	virtual ~SeekBar();
 
 protected:
+	virtual bool on_button_press_event(GdkEventButton *);
+	virtual bool on_button_release_event(GdkEventButton *);
 	virtual Glib::ustring on_format_value(double);
-	virtual void on_move_slider(Gtk::ScrollType);
 	virtual void on_update_seek_bar(gint64, gint64);
+	virtual void on_value_changed();
 
 private:
 	Player * m_player;

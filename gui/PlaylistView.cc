@@ -1,6 +1,6 @@
 #include "PlaylistView.h"
-#include <iostream>
 #include <sstream>
+#include <iostream>
 #include <gdk/gdkkeysyms.h>
 
 PlaylistView::PlaylistView(Library * library, Configurations * config,
@@ -37,9 +37,6 @@ PlaylistView::PlaylistView(Library * library, Configurations * config,
 	m_treeView.signal_row_activated().connect(
 		sigc::mem_fun(*this, &PlaylistView::on_row_activated)
 	);
-	m_treeView.signal_key_press_event().connect(
-		sigc::mem_fun(*this, &PlaylistView::on_key_press_event), false
-	);
 }
 
 PlaylistView::~PlaylistView() {}
@@ -47,10 +44,17 @@ PlaylistView::~PlaylistView() {}
 void PlaylistView::clear_list_data() {
 	m_refTreeModel->clear();
 	m_player->stop();
+	m_player->set_song_loaded(false);
+	Gtk::TreeModel::iterator tmp;
+	m_currentSong = tmp;
 }
 
 Gtk::TreeView * PlaylistView::get_tree_view() {
 	return &m_treeView;
+}
+
+bool PlaylistView::is_playlist_empty() {
+	return m_refTreeModel->children().empty();
 }
 
 void PlaylistView::play_new_list() {
@@ -132,18 +136,24 @@ bool PlaylistView::on_key_press_event(GdkEventKey * event) {
 	if (event->keyval == GDK_Delete) {
 		std::list<Gtk::TreeModel::Path> paths =
 				m_treeView.get_selection()->get_selected_rows();
+		if (paths.size() == m_refTreeModel->children().size()) {
+			clear_list_data();
+		}
 		std::list<Gtk::TreeModel::Path>::reverse_iterator it;
 		for (it = paths.rbegin(); it != paths.rend(); ++it) {
 			Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(*it);
 			if (iter) {
 				if (m_currentSong.operator bool() && iter == m_currentSong) {
 					m_player->stop();
+					m_player->set_song_loaded(false);
+					Gtk::TreeModel::iterator tmp;
+					m_currentSong = tmp;
 				}
 				m_refTreeModel->erase(iter);
 			}
 		}
 	}
-	return true;
+	return Gtk::ScrolledWindow::on_key_press_event(event);
 }
 
 void PlaylistView::on_row_activated(const Gtk::TreeModel::Path & path,

@@ -54,9 +54,6 @@ SonglistView::SonglistView(Library * library, Configurations * config,
 	m_treeView.signal_row_activated().connect(
 		sigc::mem_fun(*this, &SonglistView::on_row_activated)
 	);
-	m_treeView.signal_key_press_event().connect(
-		sigc::mem_fun(*this, &SonglistView::on_key_press_event), false
-	);
 }
 
 SonglistView::~SonglistView() {}
@@ -106,7 +103,7 @@ bool SonglistView::on_key_press_event(GdkEventKey * event) {
 			}
 		}
 	}
-	return true;
+	return Gtk::ScrolledWindow::on_key_press_event(event);
 }
 
 void SonglistView::on_row_activated(const Gtk::TreeModel::Path & path,

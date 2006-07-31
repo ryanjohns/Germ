@@ -2,7 +2,7 @@
 
 Player::Player(){
 	m_playing = false;
-	m_isSongLoaded = false;
+	m_songLoaded = false;
 	m_nextSong.clear();
 	m_backupSong.clear();
 
@@ -13,7 +13,7 @@ Player::Player(){
 	gst_bus_add_watch(gst_pipeline_get_bus(GST_PIPELINE(m_pipeline)),
 		Player::bus_watch, (gpointer)this);
 
-	g_timeout_add(100, Player::song_position_watch, (gpointer)this);
+	g_timeout_add(1000, Player::song_position_watch, (gpointer)this);
 }
 
 Player::~Player(){
@@ -26,7 +26,7 @@ bool Player::is_playing() {
 }
 
 bool Player::is_song_loaded() {
-	return m_isSongLoaded;
+	return m_songLoaded;
 }
 
 void Player::next() {
@@ -34,7 +34,7 @@ void Player::next() {
 		send_song_request(false);
 	}
 	if (!m_nextSong.empty()) {
-		m_isSongLoaded = false;
+		m_songLoaded = false;
 		stop();
 		play();
 		m_nextSong.clear();
@@ -50,12 +50,12 @@ void Player::play() {
 	if (m_nextSong.empty()) {
 		m_nextSong = m_backupSong;
 	}
-	if (!m_isSongLoaded && !m_nextSong.empty()) {
+	if (!m_songLoaded && !m_nextSong.empty()) {
 		std::string uri = "file://" + m_nextSong;
 		g_object_set(G_OBJECT(m_pipeline), "uri", uri.c_str() , NULL);
-		m_isSongLoaded = true;
+		m_songLoaded = true;
 	}
-	if (m_isSongLoaded) {
+	if (m_songLoaded) {
 		gst_element_set_state(m_pipeline, GST_STATE_PLAYING);
 		m_nextSong.clear();
 		m_playing = true;
@@ -64,14 +64,14 @@ void Player::play() {
 
 void Player::play(Song * song) {
 	set_next_song(song);
-	m_isSongLoaded = false;
+	m_songLoaded = false;
 	play();
 }
 
 void Player::previous() {
 	send_song_request(true);
 	if (!m_nextSong.empty()) {
-		m_isSongLoaded = false;
+		m_songLoaded = false;
 		stop();
 		play();
 		m_nextSong.clear();
@@ -98,6 +98,10 @@ void Player::set_next_song(Song * song) {
 		tmp += " - " + *song->get_song_title();
 		send_update_window_title(tmp);
 	}
+}
+
+void Player::set_song_loaded(bool loaded) {
+	m_songLoaded = loaded;
 }
 
 void Player::stop() {

@@ -21,6 +21,7 @@ public:
 	void previous();
 	void seek(double);
 	void set_next_song(Song *);
+	void set_song_loaded(bool);
 	void stop();
 
 	sigc::signal<void, bool> signal_song_request;
@@ -28,7 +29,7 @@ public:
 	sigc::signal<void, Glib::ustring> signal_update_window_title;
 
 private:
-	gboolean m_isSongLoaded;
+	gboolean m_songLoaded;
 	GstElement * m_pipeline;
 	std::string m_nextSong;
 	std::string m_backupSong;

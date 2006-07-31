@@ -23,6 +23,7 @@ public:
 
 	void clear_list_data();
 	Gtk::TreeView * get_tree_view();
+	bool is_playlist_empty();
 	void play_new_list();
 	void restore_playlist();
 	void save_playlist();

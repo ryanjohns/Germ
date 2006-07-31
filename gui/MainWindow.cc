@@ -2,19 +2,15 @@
 #include "../library/LibraryFileBuilder.h"
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
-#include <gdk/gdkkeysyms.h>
 
 MainWindow::MainWindow()
 : m_clear("Clear"),
   m_scan("Scan"),
-  m_previousIcon("/usr/local/share/pixmaps/media_player/previous.xpm"),
-  m_playPauseIcon("/usr/local/share/pixmaps/media_player/play_pause.xpm"),
-  m_stopIcon("/usr/local/share/pixmaps/media_player/stop.xpm"),
-  m_nextIcon("/usr/local/share/pixmaps/media_player/next.xpm"),
   m_seekBar(&m_player),
   m_playlistView(&m_library, &m_config, &m_player),
   m_songlistView(&m_library, &m_config, &m_playlistView),
-  m_treeView(&m_library, &m_songlistView, &m_playlistView) {
+  m_treeView(&m_library, &m_songlistView, &m_playlistView),
+  m_audioControls(&m_playlistView, &m_player) {
 	// build the library
 	m_library.build_library(*m_config.get_library_file());
 
@@ -38,16 +34,9 @@ MainWindow::MainWindow()
 
 	// setup and fill the lower HBox
 	m_hbox.set_spacing(5);
-	m_hbox.pack_start(m_controlsBox, Gtk::PACK_SHRINK);
+	m_hbox.pack_start(m_audioControls, Gtk::PACK_SHRINK);
 	m_hbox.pack_start(m_seekBar);
 	m_hbox.pack_start(m_optionsBox, Gtk::PACK_SHRINK);
-
-	// setup and fill the media controls button box
-	m_controlsBox.set_layout(Gtk::BUTTONBOX_START);
-	m_controlsBox.pack_start(m_previous);
-	m_controlsBox.pack_start(m_playPause);
-	m_controlsBox.pack_start(m_stop);
-	m_controlsBox.pack_start(m_next);
 
 	// setup and fill the options button box
 	m_optionsBox.set_layout(Gtk::BUTTONBOX_END);
@@ -55,40 +44,17 @@ MainWindow::MainWindow()
 	m_optionsBox.pack_start(m_clear);
 	m_optionsBox.pack_start(m_scan);
 
-	// add icons and tooltips to buttons
-	m_previous.set_image(m_previousIcon);
-	m_playPause.set_image(m_playPauseIcon);
-	m_stop.set_image(m_stopIcon);
-	m_next.set_image(m_nextIcon);
-	m_tooltips.set_tip(m_previous, "Previous");
-	m_tooltips.set_tip(m_playPause, "Play/Pause");
-	m_tooltips.set_tip(m_stop, "Stop");
-	m_tooltips.set_tip(m_next, "Next");
+	// add tooltips to buttons
 	m_tooltips.set_tip(m_clear, "Clear Playlist");
 	m_tooltips.set_tip(m_scan, "Scan for new music");
 
 	// connect button signals
-	m_previous.signal_clicked().connect(
-		sigc::mem_fun(*this, &MainWindow::on_button_previous)
-	);
-	m_playPause.signal_clicked().connect(
-		sigc::mem_fun(*this, &MainWindow::on_button_playpause)
-	);
-	m_stop.signal_clicked().connect(
-		sigc::mem_fun(*this, &MainWindow::on_button_stop)
-	);
-	m_next.signal_clicked().connect(
-		sigc::mem_fun(*this, &MainWindow::on_button_next)
-	);
 	m_clear.signal_clicked().connect(
 		sigc::mem_fun(*this, &MainWindow::on_button_clear)
 	);
 	m_scan.signal_clicked().connect(
 		sigc::mem_fun(*this, &MainWindow::on_button_scan)
 	);
-/*	m_controlsBox.signal_key_press_event.connect(
-		sigc::mem_fun(*this, &MainWindow::on_key_press_event), false
-	);*/
 
 	// setup and fill the HPaned
 	m_hpaned.set_position(m_config.get_hpaned_pos());
@@ -114,23 +80,6 @@ void MainWindow::on_button_clear() {
 	m_playlistView.clear_list_data();
 }
 
-void MainWindow::on_button_next() {
-	m_player.next();
-}
-
-void MainWindow::on_button_playpause() {
-	if (m_player.is_playing())
-		m_player.pause();
-	else if (m_player.is_song_loaded())
-		m_player.play();
-	else
-		m_playlistView.play_new_list();
-}
-
-void MainWindow::on_button_previous() {
-	m_player.previous();
-}
-
 void MainWindow::on_button_scan() {
 	Gtk::FileChooserDialog fcd(*this, "Choose Root Music Directory",
 			Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -150,17 +99,6 @@ void MainWindow::on_button_scan() {
 		m_treeView.show_artists();
 	}
 }
-
-void MainWindow::on_button_stop() {
-	m_player.stop();
-}
-
-/*bool MainWindow::on_key_press_event(GdkEventKey * event) {
-	if (event->keyval == GDK_Delete) {
-		
-	}
-	return true;
-}*/
 
 bool MainWindow::on_shutdown() {
 	m_player.stop();

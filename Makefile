@@ -39,6 +39,7 @@ SOURCES = media_player.cc \
           gui/ModelColumns.cc \
           gui/TreeColumn.cc \
           gui/SeekBar.cc \
+          gui/AudioControls.cc \
           player/Player.cc \
           config/Configurations.cc
 
@@ -55,6 +56,7 @@ HEADERS = library/Album.h \
           gui/ModelColumns.h \
           gui/TreeColumn.h \
           gui/SeekBar.h \
+          gui/AudioControls.h \
           player/Player.h \
           config/Configurations.h
 
