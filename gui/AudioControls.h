@@ -13,7 +13,6 @@ public:
 	AudioControls(PlaylistView *, Player *);
 	virtual ~AudioControls();
 
-protected:
 	virtual void on_button_next();
 	virtual void on_button_playpause();
 	virtual void on_button_previous();

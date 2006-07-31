@@ -12,7 +12,6 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
-#include <sigc++/sigc++.h>
 
 #define SEPARATOR (char)6
 

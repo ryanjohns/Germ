@@ -1,5 +1,4 @@
 #include "AudioControls.h"
-#include <gdk/gdkkeysyms.h>
 
 AudioControls::AudioControls(PlaylistView * playlistView, Player * player)
 : m_playlistView(playlistView),

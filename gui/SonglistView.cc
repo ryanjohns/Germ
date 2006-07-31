@@ -1,5 +1,4 @@
 #include "SonglistView.h"
-#include <iostream>
 #include <sstream>
 #include <gdk/gdkkeysyms.h>
 
