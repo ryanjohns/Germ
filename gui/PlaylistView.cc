@@ -43,10 +43,7 @@ PlaylistView::~PlaylistView() {}
 
 void PlaylistView::clear_list_data() {
 	m_refTreeModel->clear();
-	m_player->stop();
-	m_player->set_song_loaded(false);
-	Gtk::TreeModel::iterator tmp;
-	m_currentSong = tmp;
+	cleanup_removing_playing_song();
 }
 
 Gtk::TreeView * PlaylistView::get_tree_view() {
@@ -144,10 +141,7 @@ bool PlaylistView::on_key_press_event(GdkEventKey * event) {
 			Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(*it);
 			if (iter) {
 				if (m_currentSong.operator bool() && iter == m_currentSong) {
-					m_player->stop();
-					m_player->set_song_loaded(false);
-					Gtk::TreeModel::iterator tmp;
-					m_currentSong = tmp;
+					cleanup_removing_playing_song();
 				}
 				m_refTreeModel->erase(iter);
 			}
@@ -207,6 +201,13 @@ void PlaylistView::add_song(Song * song) {
 	row[m_columns.m_col_bitrate] = song->get_bitrate();
 	row[m_columns.m_col_path] = *song->get_path();
 	row[m_columns.m_song_node] = song;
+}
+
+void PlaylistView::cleanup_removing_playing_song() {
+	m_player->stop();
+	m_player->set_song_loaded(false);
+	Gtk::TreeModel::iterator tmp;
+	m_currentSong = tmp;
 }
 
 std::string PlaylistView::format_time(int length) {

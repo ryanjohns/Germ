@@ -48,6 +48,7 @@ private:
 	Gtk::TreeModel::iterator m_currentSong;
 
 	void add_song(Song *);
+	void cleanup_removing_playing_song();
 	std::string format_time(int);
 	void decorate_current_row();
 	void undecorate_current_row();
