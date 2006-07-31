@@ -9,9 +9,32 @@ LibraryFileBuilder::~LibraryFileBuilder() {}
 
 void LibraryFileBuilder::generate_library_file(std::string & library_file,
 			std::string & root) {
-	library_file_stream.open(library_file.c_str());
+	m_libraryFileStream.open(library_file.c_str());
 	recurse_directory(root);
-	library_file_stream.close();
+	m_libraryFileStream.close();
+}
+
+void LibraryFileBuilder::process_file(std::string & path) {
+	TagLib::FileRef file(path.c_str());
+	if (!file.isNull()) {
+		TagLib::String artist_name = file.tag()->artist();
+		TagLib::String album_title = file.tag()->album();
+		TagLib::String song_title = file.tag()->title();
+		TagLib::String genre = file.tag()->genre();
+		TagLib::uint year = file.tag()->year();
+		TagLib::uint track_number = file.tag()->track();
+		TagLib::uint length = file.audioProperties()->length();
+		TagLib::uint bitrate = file.audioProperties()->bitrate();
+		m_libraryFileStream << artist_name << SEPARATOR
+		                    << album_title << SEPARATOR
+		                    << song_title << SEPARATOR
+		                    << genre << SEPARATOR
+		                    << year << SEPARATOR
+		                    << track_number << SEPARATOR
+		                    << length << SEPARATOR
+		                    << bitrate << SEPARATOR
+		                    << path << std::endl;
+	}
 }
 
 void LibraryFileBuilder::recurse_directory(std::string & path) {
@@ -35,27 +58,4 @@ void LibraryFileBuilder::recurse_directory(std::string & path) {
 		}
 	}
 	Closedir(dir);
-}
-
-void LibraryFileBuilder::process_file(std::string & path) {
-	TagLib::FileRef file(path.c_str());
-	if (!file.isNull()) {
-		TagLib::String artist_name = file.tag()->artist();
-		TagLib::String album_title = file.tag()->album();
-		TagLib::String song_title = file.tag()->title();
-		TagLib::String genre = file.tag()->genre();
-		TagLib::uint year = file.tag()->year();
-		TagLib::uint track_number = file.tag()->track();
-		TagLib::uint length = file.audioProperties()->length();
-		TagLib::uint bitrate = file.audioProperties()->bitrate();
-		library_file_stream << artist_name << SEPARATOR
-		                    << album_title << SEPARATOR
-		                    << song_title << SEPARATOR
-		                    << genre << SEPARATOR
-		                    << year << SEPARATOR
-		                    << track_number << SEPARATOR
-		                    << length << SEPARATOR
-		                    << bitrate << SEPARATOR
-		                    << path << std::endl;
-	}
 }

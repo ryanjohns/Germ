@@ -1,53 +1,53 @@
 #include "Song.h"
 #include <string>
 
-Song::Song(std::string _artist_name, std::string _album_title,
-	std::string _song_title, std::string _genre, int _year,
-	int _track_number, int _length, int _bitrate, std::string _path) 
-: artist_name(_artist_name),
-  album_title(_album_title),
-  song_title(_song_title),
-  genre(_genre),
-  year(_year),
-  track_number(_track_number),
-  length(_length),
-  bitrate(_bitrate),
-  path(_path) {}
+Song::Song(std::string artistName, std::string albumTitle,
+	std::string songTitle, std::string genre, int year,
+	int trackNumber, int length, int bitrate, std::string path) 
+: m_artistName(artistName),
+  m_albumTitle(albumTitle),
+  m_songTitle(songTitle),
+  m_genre(genre),
+  m_year(year),
+  m_trackNumber(trackNumber),
+  m_length(length),
+  m_bitrate(bitrate),
+  m_path(path) {}
 
 Song::~Song() {}
 
-std::string * Song::get_artist_name() {
-	return &artist_name;
-}
-
 std::string * Song::get_album_title() {
-	return &album_title;
+	return &m_albumTitle;
 }
 
-std::string * Song::get_song_title() {
-	return &song_title;
-}
-
-std::string * Song::get_genre() {
-	return &genre;
-}
-
-int Song::get_year() {
-	return year;
-}
-
-int Song::get_track_number() {
-	return track_number;
-}
-
-int Song::get_length() {
-	return length;
+std::string * Song::get_artist_name() {
+	return &m_artistName;
 }
 
 int Song::get_bitrate() {
-	return bitrate;
+	return m_bitrate;
+}
+
+std::string * Song::get_genre() {
+	return &m_genre;
+}
+
+int Song::get_length() {
+	return m_length;
 }
 
 std::string * Song::get_path() {
-	return &path;
+	return &m_path;
+}
+
+std::string * Song::get_song_title() {
+	return &m_songTitle;
+}
+
+int Song::get_track_number() {
+	return m_trackNumber;
+}
+
+int Song::get_year() {
+	return m_year;
 }

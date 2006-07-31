@@ -16,42 +16,42 @@ public:
 	Configurations();
 	virtual ~Configurations();
 
-	void check_files_and_dir();
-	void read_config_file();
-	void write_config_file();
-	int get_songlist_column(int);
-	int get_playlist_column(int);
+	int get_height();
+	std::string * get_home_path();
 	int get_hpaned_pos();
+	std::string * get_library_file();
+	std::string * get_library_root();
+	std::vector<std::string> * get_playlist();
+	int get_playlist_column(int);
+	int get_songlist_column(int);
 	int get_vpaned_pos();
 	int get_width();
-	int get_height();
-	std::string * get_library_root();
-	std::string * get_home_path();
-	std::string * get_library_file();
-	std::vector<std::string> * get_playlist();
-	void set_songlist_column(int, int);
-	void set_playlist_column(int, int);
+	void set_height(int);
 	void set_hpaned_pos(int);
+	void set_library_root(std::string);
+	void set_playlist_column(int, int);
+	void set_songlist_column(int, int);
 	void set_vpaned_pos(int);
 	void set_width(int);
-	void set_height(int);
-	void set_library_root(std::string);
+	void write_config_file();
 
 private:
-	int songlist_columns[7];
-	int playlist_columns[7];
-	int width;
-	int height;
-	int hpaned_pos;
-	int vpaned_pos;
-	std::string library_root;
-	std::string home_path;
-	std::string conf_dir;
-	std::string library_file;
-	std::string conf_file;
-	std::vector<std::string> playlist;
+	int m_songlistColumns[7];
+	int m_playlistColumns[7];
+	int m_width;
+	int m_height;
+	int m_hpanedPos;
+	int m_vpanedPos;
+	std::string m_libraryRoot;
+	std::string m_homePath;
+	std::string m_confDir;
+	std::string m_libraryFile;
+	std::string m_confFile;
+	std::vector<std::string> m_playlist;
 
+	void check_files_and_dir();
 	void initialize_configs();
+	void read_config_file();
 
 	// wrapper functions
 	static inline pid_t Fork(void) {

@@ -12,30 +12,35 @@ public:
 	Player();
 	virtual ~Player();
 
-	virtual void signal_song_request(bool);
-	virtual void signal_update_window_title(Glib::ustring);
-
-	void setNextSong(Song *);
+	bool is_playing();
+	bool is_song_loaded();
+	void next();
+	void pause();
 	void play();
 	void play(Song *);
-	void pause();
-	void next();
-	void stop();
 	void previous();
 	void seek(double);
-	bool isPlaying();
-	bool isSongLoaded();
+	void set_next_song(Song *);
+	void stop();
 
-	sigc::signal<void, bool> m_signal_song_request;
-	sigc::signal<void, Glib::ustring> m_signal_update_window_title;
+	sigc::signal<void, bool> signal_song_request;
+	sigc::signal<void, gint64, gint64> signal_update_seek_bar;
+	sigc::signal<void, Glib::ustring> signal_update_window_title;
 
 private:
-	static gboolean bus_watch(GstBus *, GstMessage *, gpointer);
 	gboolean m_isSongLoaded;
-	GstElement * pipeline;
+	GstElement * m_pipeline;
 	std::string m_nextSong;
 	std::string m_backupSong;
 	bool m_playing;
+
+	GstElement * get_pipeline();
+	void send_song_request(bool);
+	void send_update_seek_bar(gint64, gint64);
+	void send_update_window_title(Glib::ustring);
+
+	static gboolean bus_watch(GstBus *, GstMessage *, gpointer);
+	static gboolean song_position_watch(gpointer);
 };
 
 #endif /*PLAYER_H_*/

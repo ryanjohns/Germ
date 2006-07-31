@@ -13,19 +13,21 @@ class Library {
 public:
 	Library();
 	virtual ~Library();
+
 	void build_library(std::string &);
-	void print_library();
-	std::vector<Artist> * get_library_root();
 	void clear_library();
 	Song * find_song_node(std::string &, std::string &, std::string &);
+	std::vector<Artist> * get_library_root();
 
 private:
-	std::vector<Artist> library_root;
-	Artist * handle_artist(std::string &);
-	Album * handle_album(std::string &, Artist *);
+	std::vector<Artist> m_libraryRoot;
+
 	void create_song(std::string &, std::string &,
 		std::string &, std::string &, int, int, int,
 		int, std::string &, Album *);
+	Album * handle_album(std::string &, Artist *);
+	Artist * handle_artist(std::string &);
+	void print_library();
 };
 
 #endif /*LIBRARY_H_*/

@@ -20,38 +20,36 @@ class PlaylistView : public Gtk::ScrolledWindow {
 public:
 	PlaylistView(Library *, Configurations *, Player *);
 	virtual ~PlaylistView();
-	
-	void clearListData();
-	void setListData(Artist *);
-	void setListData(Album *);
-	void setListData(Song *);
-	void showAllSongs();
-	Gtk::TreeView * getTreeView();
-	void playNewList();
-	void restorePlaylist();
-	void savePlaylist();
+
+	void clear_list_data();
+	Gtk::TreeView * get_tree_view();
+	void play_new_list();
+	void restore_playlist();
+	void save_playlist();
+	void set_list_data(Artist *);
+	void set_list_data(Album *);
+	void set_list_data(Song *);
+	void show_all_songs();
 
 protected:
-	virtual void on_song_request(bool);
-	virtual void on_row_activated(const Gtk::TreeModel::Path &,
-			Gtk::TreeViewColumn *);
 	virtual bool on_key_press_event(GdkEventKey *);
-//	virtual void on_drag_data_received(const Glib::RefPtr<Gdk::DragContext> &, int, int, const Gtk::SelectionData &, guint, guint);
-	
-	ModelColumns m_Columns;
-	Gtk::TreeView m_TreeView;
-	Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+	virtual void on_row_activated(const Gtk::TreeModel::Path &,
+		Gtk::TreeViewColumn *);
+	virtual void on_song_request(bool);
 
 private:
-	Library * library;
-	Configurations * config;
-	Player * player;
-	Gtk::TreeModel::iterator current_song;
-	
-	void addSong(Song *);
-	std::string formatLength(int);
-	void decorateCurrentRow();
-	void undecorateCurrentRow();
+	ModelColumns m_columns;
+	Gtk::TreeView m_treeView;
+	Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+	Library * m_library;
+	Configurations * m_config;
+	Player * m_player;
+	Gtk::TreeModel::iterator m_currentSong;
+
+	void add_song(Song *);
+	std::string format_time(int);
+	void decorate_current_row();
+	void undecorate_current_row();
 };
 
 #endif /*PLAYLISTVIEW_H_*/

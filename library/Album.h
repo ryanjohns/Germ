@@ -9,14 +9,15 @@ class Album {
 public:
 	Album(std::string, std::string);
 	virtual ~Album();
-	std::string * get_artist_name();
+
 	std::string * get_album_title();
+	std::string * get_artist_name();
 	std::vector<Song> * get_song_children();
-	
+
 private:
-	std::string artist_name;
-	std::string album_title;
-	std::vector<Song> song_children;
+	std::string m_artistName;
+	std::string m_albumTitle;
+	std::vector<Song> m_songChildren;
 };
 
 #endif /*ALBUM_H_*/

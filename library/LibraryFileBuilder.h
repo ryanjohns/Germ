@@ -15,12 +15,14 @@ class LibraryFileBuilder	{
 public:
 	LibraryFileBuilder();
 	virtual ~LibraryFileBuilder();
+
 	void generate_library_file(std::string &, std::string &);
 
 private:
-	std::ofstream library_file_stream;
-	void recurse_directory(std::string &);
+	std::ofstream m_libraryFileStream;
+
 	void process_file(std::string &);
+	void recurse_directory(std::string &);
 
 	// wrapper functions
 	static inline DIR * Opendir(const char * name) {

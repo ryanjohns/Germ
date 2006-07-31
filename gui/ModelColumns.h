@@ -8,7 +8,7 @@ class ModelColumns : public Gtk::TreeModel::ColumnRecord {
 public:
 	ModelColumns();
 	virtual ~ModelColumns();
-	
+
 	Gtk::TreeModelColumn<Glib::ustring> m_col_artist_name;
 	Gtk::TreeModelColumn<Glib::ustring> m_col_album_title;
 	Gtk::TreeModelColumn<Glib::ustring> m_col_song_title;

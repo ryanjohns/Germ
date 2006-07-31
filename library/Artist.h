@@ -9,12 +9,13 @@ class Artist {
 public:
 	Artist(std::string);
 	virtual ~Artist();
-	std::string * get_artist_name();
+
 	std::vector<Album> * get_album_children();
-	
+	std::string * get_artist_name();
+
 private:
-	std::string artist_name;
-	std::vector<Album> album_children;
+	std::string m_artistName;
+	std::vector<Album> m_albumChildren;
 };
 
 #endif /*ARTIST_H_*/

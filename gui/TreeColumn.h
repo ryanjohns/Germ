@@ -9,7 +9,7 @@ class TreeColumn : public Gtk::TreeModel::ColumnRecord {
 public:
 	TreeColumn();
 	virtual ~TreeColumn();
-	
+
 	Gtk::TreeModelColumn<Glib::ustring> m_col_label;
 	Gtk::TreeModelColumn<Glib::ustring> m_col_sort;
 	Gtk::TreeModelColumn<Artist *> m_artist_node;

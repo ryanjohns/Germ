@@ -17,31 +17,28 @@ class SonglistView : public Gtk::ScrolledWindow {
 public:
 	SonglistView(Library *, Configurations *, PlaylistView *);
 	virtual ~SonglistView();
-	
-	void clearListData();
-	void setListData(Artist *);
-	void setListData(Album *);
-	void showAllSongs();
-	Gtk::TreeView * getTreeView();
+
+	void clear_list_data();
+	Gtk::TreeView * get_tree_view();
+	void set_list_data(Artist *);
+	void set_list_data(Album *);
+	void show_all_songs();
 
 protected:
-	virtual void on_row_activated(const Gtk::TreeModel::Path &,
-			Gtk::TreeViewColumn *);
 	virtual bool on_key_press_event(GdkEventKey *);
-//	virtual void on_drag_data_get(const Glib::RefPtr<Gdk::DragContext> &, Gtk::SelectionData &, guint, guint);
-	
-	ModelColumns m_Columns;
-	Gtk::TreeView m_TreeView;
-	Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+	virtual void on_row_activated(const Gtk::TreeModel::Path &,
+		Gtk::TreeViewColumn *);
 
 private:
-	Library * library;
-	Configurations * config;
-	PlaylistView * playlist_view;
-	
-	void addSong(Song *);
-	std::string formatLength(int);
-	void addColumns();
+	ModelColumns m_columns;
+	Gtk::TreeView m_treeView;
+	Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+	Library * m_library;
+	Configurations * m_config;
+	PlaylistView * m_playlistView;
+
+	void add_song(Song *);
+	std::string format_time(int);
 };
 
 #endif /*SONGLISTVIEW_H_*/
