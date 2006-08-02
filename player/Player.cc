@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <sstream>
 
 Player::Player(){
 	m_playing = false;
@@ -97,6 +98,9 @@ void Player::set_next_song(Song * song) {
 		Glib::ustring tmp(*song->get_artist_name());
 		tmp += " - " + *song->get_song_title();
 		send_update_window_title(tmp);
+		int len = song->get_length();
+		send_song_length(format_time(len));
+		send_update_seek_bar(0, 0);
 	}
 }
 
@@ -110,8 +114,26 @@ void Player::stop() {
 	send_update_seek_bar(0, 0);
 }
 
+Glib::ustring Player::format_time(int length) {
+	std::ostringstream oss;
+	int minutes = length / 60;
+	int seconds = length - minutes * 60;
+	oss << minutes << ":";
+	if (seconds < 10) {
+		oss << 0 << seconds;
+	}
+	else {
+		oss << seconds;
+	}
+	return oss.str();
+}
+
 GstElement * Player::get_pipeline() {
 	return m_pipeline;
+}
+
+void Player::send_song_length(Glib::ustring str) {
+	signal_song_length.emit(str);
 }
 
 void Player::send_song_request(bool previous) {

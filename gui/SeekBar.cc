@@ -4,6 +4,7 @@
 SeekBar::SeekBar(Player * player)
 : m_player(player) {
 	m_length = 0;
+	m_strLen = "0:00";
 
 	set_range(0.0, 1.0);
 	set_increments(0.0001, 0.1);
@@ -11,6 +12,9 @@ SeekBar::SeekBar(Player * player)
 	set_update_policy(Gtk::UPDATE_DISCONTINUOUS);
 	set_value_pos(Gtk::POS_RIGHT);
 
+	m_player->signal_song_length.connect(
+		sigc::mem_fun(*this, &SeekBar::on_song_length)
+	);
 	m_seekBarConnection = m_player->signal_update_seek_bar.connect(
 		sigc::mem_fun(*this, &SeekBar::on_update_seek_bar)
 	);
@@ -35,8 +39,12 @@ Glib::ustring SeekBar::on_format_value(double val) {
 	Glib::ustring str_value;
 	str_value = format_time(gint64(m_length * val));
 	str_value += "/";
-	str_value += format_time(m_length);
+	str_value += m_strLen;
 	return str_value;
+}
+
+void SeekBar::on_song_length(Glib::ustring str) {
+	m_strLen = str;
 }
 
 void SeekBar::on_update_seek_bar(gint64 pos, gint64 len) {

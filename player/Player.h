@@ -24,6 +24,7 @@ public:
 	void set_song_loaded(bool);
 	void stop();
 
+	sigc::signal<void, Glib::ustring> signal_song_length;
 	sigc::signal<void, bool> signal_song_request;
 	sigc::signal<void, gint64, gint64> signal_update_seek_bar;
 	sigc::signal<void, Glib::ustring> signal_update_window_title;
@@ -35,7 +36,9 @@ private:
 	std::string m_backupSong;
 	bool m_playing;
 
+	Glib::ustring format_time(int);
 	GstElement * get_pipeline();
+	void send_song_length(Glib::ustring);
 	void send_song_request(bool);
 	void send_update_seek_bar(gint64, gint64);
 	void send_update_window_title(Glib::ustring);
