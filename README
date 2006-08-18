@@ -1,0 +1,13 @@
+Media Player 0.01
+
+Requirements:
+-----------------
+
+  gstreamer  >= 0.10.6
+  taglib     >= 1.4
+  gtkmm      >= 2.8.8
+
+(C) GNU LGPL 2006
+
+  Ryan Johns <ryanjohns@gmail.com>
+  Stephen McCarthy <sjmccarthy@gmail.com>
