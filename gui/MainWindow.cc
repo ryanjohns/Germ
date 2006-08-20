@@ -1,21 +1,21 @@
 /*******************************************************************************
 
-Media_Player - Linux music library and player.
+Germ - The infectious music player.
 Copyright (C) 2006  Ryan Johns and Stephen McCarthy
 
 This file is part of Media_Player.
-Media_Player is free software; you can redistribute it and/or
+Germ is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
 
-Media_Player is distributed in the hope that it will be useful,
+Germ is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
-License along with Media_Player; if not, write to the Free Software
+License along with Germ; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 *******************************************************************************/
@@ -37,8 +37,8 @@ MainWindow::MainWindow()
 	m_library.build_library(*m_config.get_library_file());
 
 	// setup the main window and connect window signals
-	set_title("Media Player");
-	set_icon_from_file("/usr/local/share/pixmaps/media_player.png");
+	set_title("Germ");
+	set_icon_from_file("/usr/local/share/pixmaps/germ.png");
 	set_default_size(m_config.get_width(), m_config.get_height());
 	set_border_width(1);
 	Gtk::Main::signal_quit().connect(
@@ -142,5 +142,5 @@ bool MainWindow::on_shutdown() {
 }
 
 void MainWindow::on_update_window_title(Glib::ustring title) {
-	set_title(title + " :: Media Player");
+	set_title(title + " :: Germ");
 }

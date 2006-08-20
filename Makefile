@@ -1,5 +1,5 @@
 # Filenames
-EXECUTABLE = media_player
+EXECUTABLE = germ
 ICON = icons/$(EXECUTABLE).png
 PIXMAPS = icons/next.xpm \
           icons/play_pause.xpm \
@@ -26,7 +26,7 @@ CXXFLAGS = -Wall -W -g -c \
 LDFLAGS = `pkg-config --libs gtkmm-2.4 gstreamer-0.10` `taglib-config --libs`
 
 # Source files
-SOURCES = media_player.cc \
+SOURCES = germ.cc \
           library/Album.cc \
           library/Artist.cc \
           library/Library.cc \

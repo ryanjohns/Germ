@@ -1,21 +1,21 @@
 /*******************************************************************************
 
-Media_Player - Linux music library and player.
+Germ - The infectious music player.
 Copyright (C) 2006  Ryan Johns and Stephen McCarthy
 
 This file is part of Media_Player.
-Media_Player is free software; you can redistribute it and/or
+Germ is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
 
-Media_Player is distributed in the hope that it will be useful,
+Germ is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
-License along with Media_Player; if not, write to the Free Software
+License along with Germ; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 *******************************************************************************/
@@ -25,10 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 AudioControls::AudioControls(PlaylistView * playlistView, Player * player)
 : m_playlistView(playlistView),
   m_player(player),
-  m_previousIcon("/usr/local/share/pixmaps/media_player/previous.xpm"),
-  m_playPauseIcon("/usr/local/share/pixmaps/media_player/play_pause.xpm"),
-  m_stopIcon("/usr/local/share/pixmaps/media_player/stop.xpm"),
-  m_nextIcon("/usr/local/share/pixmaps/media_player/next.xpm") {
+  m_previousIcon("/usr/local/share/pixmaps/germ/previous.xpm"),
+  m_playPauseIcon("/usr/local/share/pixmaps/germ/play_pause.xpm"),
+  m_stopIcon("/usr/local/share/pixmaps/germ/stop.xpm"),
+  m_nextIcon("/usr/local/share/pixmaps/germ/next.xpm") {
 	set_layout(Gtk::BUTTONBOX_START);
 
 	pack_start(m_previous);

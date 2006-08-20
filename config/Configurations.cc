@@ -1,21 +1,21 @@
 /*******************************************************************************
 
-Media_Player - Linux music library and player.
+Germ - The infectious music player.
 Copyright (C) 2006  Ryan Johns and Stephen McCarthy
 
 This file is part of Media_Player.
-Media_Player is free software; you can redistribute it and/or
+Germ is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
 
-Media_Player is distributed in the hope that it will be useful,
+Germ is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
-License along with Media_Player; if not, write to the Free Software
+License along with Germ; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 *******************************************************************************/
@@ -102,8 +102,8 @@ void Configurations::set_width(int width) {
 void Configurations::write_config_file() {
 	std::ofstream conf_file_stream(m_confFile.c_str());
 	conf_file_stream << "# This file was generated automatically "
-	                 << "by media_player.\n# DO NOT modify the "
-	                 << "contents of this file!" << std::endl;
+	                 << "by Germ.\n# DO NOT modify the contents "
+	                 << "of this file!" << std::endl;
 	conf_file_stream << "LIBRARY_ROOT=" << m_libraryRoot << std::endl;
 	conf_file_stream << "HPANED_POS=" << m_hpanedPos << std::endl;
 	conf_file_stream << "VPANED_POS=" << m_vpanedPos << std::endl;
@@ -153,8 +153,8 @@ void Configurations::initialize_configs() {
 	}
 	m_libraryRoot = "UNSPECIFIED";
 	m_homePath = Getenv("HOME");
-	m_confDir = m_homePath + "/.media_player";
-	m_confFile = m_confDir + "/mp.conf";
+	m_confDir = m_homePath + "/.germ";
+	m_confFile = m_confDir + "/germ.conf";
 	m_libraryFile = m_confDir + "/library.dat";
 }
 
