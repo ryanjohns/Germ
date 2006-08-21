@@ -1,0 +1,7 @@
+Installation steps:
+
+1) make
+2) make install
+
+Germ will be installed to /usr/local.  You should run 'make' as a normal
+user and 'make install' as root.
