@@ -3,7 +3,7 @@
 Germ - The infectious music player.
 Copyright (C) 2006  Ryan Johns and Stephen McCarthy
 
-This file is part of Media_Player.
+This file is part of Germ.
 Germ is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
